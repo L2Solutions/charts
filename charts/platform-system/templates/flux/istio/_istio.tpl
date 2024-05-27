@@ -136,3 +136,38 @@ affinity:
 {{- $defaultValues := (include "platform-system.components.istio.components.gateway.defaultValues" $ | fromYaml ) }}
 {{- mergeOverwrite $defaultValues .Values.components.istio.components.gateway.values | toYaml }}
 {{- end -}}
+
+
+{{/*
+  Istio egress templates
+*/}}
+
+{{ define "platform-system.components.istio.components.egress.release.name" }}
+{{- printf "%s-istio-egress" .Release.Name | replace "+" "_" | trimSuffix "-" }}
+{{- end -}}
+
+{{- define "platform-system.components.istio.components.egress.defaultValues" -}}
+{{- $ := . -}}
+{{- $global := $.Values.global -}}
+{{- $parent := $.Values.components.istio -}}
+{{- $component := $parent.components.egress -}}
+
+{{- $anno := merge $global.annotations $parent.annotations $component.annotations -}}
+{{- $nodeSel := merge $global.nodeSelector $parent.nodeSelector $component.nodeSelector -}}
+{{- $tol := default $global.tolerations $parent.tolerations $component.tolerations -}}
+{{- $aff := default $global.affinity $parent.affinity $component.affinity  -}}
+
+global:
+  istioNamespace: {{ list $parent $ | include "skyfjell.common.format.component.namespace" }}
+gateways:
+  istio-egressgateway:
+    nodeSelector: {{- toYaml $nodeSel | nindent 6 }}
+    tolerations: {{- toYaml $tol | nindent 6 }}
+
+{{- end -}}
+
+
+{{- define "platform-system.components.istio.components.egress.values" }}
+{{- $defaultValues := (include "platform-system.components.istio.components.egress.defaultValues" $ | fromYaml ) }}
+{{- mergeOverwrite $defaultValues .Values.components.istio.components.egress.values | toYaml }}
+{{- end -}}

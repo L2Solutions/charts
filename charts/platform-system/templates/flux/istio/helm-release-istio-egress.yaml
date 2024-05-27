@@ -1,0 +1,38 @@
+{{- $key := "egress" -}}
+{{- $parent := .Values.components.istio -}}
+{{- $component := get $parent.components $key -}}
+{{- $solution := .Values.solution -}}
+
+{{- $repo := .Values.components.helmRepositories.components.istio -}}
+{{- $sourceName := list $repo.name $ | include "platform-system.format.name" -}}
+{{- $sourceName := default $sourceName $parent.chart.source.name $component.chart.source.name -}}
+
+{{ if and $component.enabled $parent.enabled (eq $solution.name "flux") }}
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: {{ list $parent.name $component.name $ | include "platform-system.format.name" }}
+  namespace: {{ $solution.namespace | quote }}
+  labels:
+    {{- include "platform-system.labels" $ | nindent 4 }}
+    {{- include "skyfjell.common.chartLabels" $ | nindent 4 }}
+spec:
+  releaseName: {{ list $parent.name $component.name $ | include "platform-system.format.name" }}
+  targetNamespace: {{ list $parent $ | include "skyfjell.common.format.component.namespace" }}
+  chart:
+    spec:
+      chart: {{ $component.chart.name }}
+      version: {{ default $parent.chart.version $component.chart.version }}
+      sourceRef:
+        kind: {{ default $parent.chart.source.kind $component.chart.source.kind }}
+        name: {{ $sourceName }}
+        namespace: {{ $solution.namespace }}
+  interval: {{ $solution.interval }}
+  install:
+    crds: {{ $component.crds.install }}
+  upgrade:
+    crds: {{ $component.crds.update }}
+  values:
+    {{- include "platform-system.components.istio.components.egress.values" $ | nindent 4 }}
+{{- end }}

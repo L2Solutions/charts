@@ -184,6 +184,37 @@ components:
         serviceAccountAnnotations: {}
         # Override Chart Values
         values: {}
+      # Istio Egress
+      egress:
+        # Toggle Component
+        # WARNING: This is intentionally disabled. Override in values to create a gateway.
+        enabled: false
+        # Component Release Name. Prefixed by parent component(s)
+        name: egress
+        # Namespace to Create/Install - Resolves to: `[prefix]-[namespace|name]`
+        namespace: istio-egress
+        # Chart/Source Configuration
+        chart:
+          name: istio-egress
+          # Defaults to Parent `version`
+          version: ""
+          # Defaults to Parent `source`
+          # source:
+          #   kind: ""
+          #   repository: ""
+          source: {}
+        # Affinity - Deeper component values take precedence.
+        affinity: {}
+        # Annotations - Deeper component values are merged.
+        annotations: {}
+        # Node Selector - Deeper component values take precedence.
+        nodeSelector: {}
+        # Tolerations - Deeper component values take precedence.
+        tolerations: []
+        serviceAccountAnnotations: {}
+        # Override Chart Values
+        values: {}
+
   kyverno:
     # Toggle Component
     enabled: true

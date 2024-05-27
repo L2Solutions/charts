@@ -1,6 +1,6 @@
 {{- $components := values .Values.components -}}
 # Add child components that need their own ns.
-{{- $components := append $components .Values.components.istio.components.gateway -}}
+{{- $components := concat $components (list .Values.components.istio.components.gateway .Values.components.istio.components.egress) -}}
 
 {{- $istio := .Values.components.istio -}}
 
