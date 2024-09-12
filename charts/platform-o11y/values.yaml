@@ -1,0 +1,91 @@
+prefix: o11y
+
+components:
+  flux:
+    enabled: true
+    namespace: "flux-system"
+    interval: 10m
+  grafana:
+    enabled: true
+    name: grafana
+    chart:
+      name: grafana
+      version: 6.50.5
+      source:
+        kind: HelmRepository
+        name: grafana
+    values: []
+  jaeger:
+    enabled: true
+    name: jaeger
+    chart:
+      name: jaeger
+      version: 0.66.1
+      source:
+        kind: HelmRepository
+        name: jaegertracing
+  kiali:
+    enabled: true
+    name: kiali
+    components:
+      operator:
+        name: operator
+        enabled: true
+        chart:
+          name: kiali-operator
+          version: 1.62.0
+          source:
+            kind: HelmRepository
+            name: kiali
+  loki:
+    enabled: true
+    name: loki
+    chart:
+      name: loki
+      version: 4.4.2
+      source:
+        kind: HelmRepository
+        name: grafana
+  promtail:
+    enabled: true
+    name: promtail
+    chart:
+      name: promtail
+      version: 6.8.1
+      source:
+        kind: HelmRepository
+        name: grafana
+  prometheus:
+    enabled: true
+    name: prometheus
+    chart:
+      name: prometheus
+      version: 19.3.3
+      source:
+        kind: HelmRepository
+        name: prometheus-community
+
+  helmRepositories:
+    enabled: true
+    components:
+      grafana:
+        name: grafana
+        url: https://grafana.github.io/helm-charts
+        enabled: true
+      jaegertracing:
+        name: jaegertracing
+        url: https://jaegertracing.github.io/helm-charts
+        enabled: true
+      kiali:
+        name: kiali
+        url: https://kiali.org/helm-charts
+        enabled: true
+      prometheus-community:
+        name: prometheus-community
+        url: https://prometheus-community.github.io/helm-charts
+        enabled: true
+
+global:
+  skyfjell:
+    validate:
+      api: true

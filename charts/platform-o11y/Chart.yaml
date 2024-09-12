@@ -1,0 +1,9 @@
+apiVersion: v2
+name: platform-o11y
+description: Skyfjell Platform Observability Chart
+type: application
+version: 0.0.1
+dependencies:
+  - name: common
+    repository: "@skyfjell"
+    version: "0.0.x"

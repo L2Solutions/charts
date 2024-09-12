@@ -1,0 +1,4 @@
+{{- define "platform-o11y.components.grafana.values" -}}
+{{- end -}}
+{{- define "platform-o11y.components.grafana.components.test2.values" -}}
+{{- end -}}

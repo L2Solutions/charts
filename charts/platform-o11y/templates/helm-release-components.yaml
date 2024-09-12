@@ -1,0 +1,3 @@
+{{- range $component := omit .Values.components "helmRepositories" -}}
+{{- list $component $ | include "skyfjell.common.template.flux.helm-release" }}
+{{- end -}}

@@ -1,0 +1,3 @@
+{{- range $component := .Values.components.helmRepositories.components -}}
+{{- list $component $ | include "skyfjell.common.template.flux.helm-repository" }}
+{{- end -}}
